@@ -1,0 +1,37 @@
+# Dependabot: the half of dependency security that scanning cannot do.
+#
+# ci/scan-deps.sh answers "is anything we depend on vulnerable today". It
+# cannot answer "who notices next month". Dependabot opens the PR, and the
+# PR goes through the same gates as any other change, because an automated
+# bump is the change most likely to be merged without being read.
+#
+# Dependabot cannot see the digests in ci/pins.sh and ci/lang/pins.sh.
+# Those need a scheduled freshness check (docs/BLUEPRINT.md section 7).
+version: 2
+updates:
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      go-modules:
+        patterns: ["*"]
+    commit-message:
+      prefix: chore
+      include: scope
+
+  # Actions are pinned by commit SHA, and a SHA pin never breaks: it just
+  # quietly stops receiving fixes.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: ci
+
+  # Add a `docker` entry per directory holding a Dockerfile, in the same PR
+  # as the first one.

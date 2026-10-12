@@ -1,0 +1,12 @@
+# Code the coverage floor does not count, one repository-relative file path
+# per line. ci/coverage.sh reads this file; it is the single place this
+# decision lives.
+#
+# An entry belongs here only when CI has no way to execute the file: an
+# adapter for a proprietary SDK, an appliance or a service CI cannot reach.
+# It never belongs here because a file is hard to test. Beside each entry,
+# say what verifies it instead (for example, "the conformance suite
+# against <backend> in the maintainer's environment"), and label that
+# claim maintainer-verified wherever it is made.
+#
+# Empty today: every file in the tree runs in CI.

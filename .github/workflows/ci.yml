@@ -1,0 +1,139 @@
+# The pipeline. Every job is a gate, and each gate is one script under
+# ci/ (or tools/), run the same way locally. A `run:` step here is one call
+# to one script: a check that cannot be run from a checkout does not belong
+# in this file.
+#
+#   suite    pins, shellcheck, links, allowlist schema, the progress
+#            contract, the session-close selftest, lint, tests, coverage
+#            floor
+#   sast     Semgrep over this repository's code
+#   secrets  gitleaks over the full history
+#   deps     trivy fs and the language scanner, and every allowlist entry
+#            in force must have suppressed something
+#   iac      trivy config over Dockerfiles, manifests and IaC
+#
+# All five are required checks on main, with enforce_admins on, so the
+# owner is not exempt (docs/BLUEPRINT.md section 6). The job `name:` values
+# are the status-check names branch protection lists; renaming one
+# silently drops it from protection, so rename both together.
+#
+# Every third-party reference is pinned: actions by commit SHA here, images
+# by digest in ci/pins.sh and ci/lang/pins.sh. ci/check-pins.sh checks both.
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  suite:
+    name: suite (lint, test, coverage)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # The caches live under .local/ and are mounted into the toolchain
+      # container by ci/lang/. Only compilation and download caches: every
+      # test run disables result caches, because a replayed result is not a
+      # run.
+      - name: Restore toolchain caches
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .local/ci-cache
+          key: toolchain-${{ runner.os }}-${{ hashFiles('go.sum', 'requirements*.txt', 'ci/lang/*.txt', 'ci/lang/pins.sh') }}
+          restore-keys: |
+            toolchain-${{ runner.os }}-
+
+      - name: Every third-party reference is pinned
+        run: ci/check-pins.sh
+
+      - name: Every shell script passes shellcheck
+        run: ci/lint-shell.sh
+
+      - name: Every relative link in the documentation resolves
+        run: tools/check-public-links.sh
+
+      - name: Every allowlist entry has a reason and an expiry
+        run: ci/check-allowlist.sh
+
+      - name: The progress contract holds
+        run: ci/check-progress.sh
+
+      - name: The session-close gate refuses each of its reasons
+        run: ci/session-close-selftest.sh
+
+      - name: Format, vet or types, lint
+        run: ci/lint-code.sh
+
+      - name: Tests
+        run: ci/test.sh
+
+      - name: Coverage floor
+        run: ci/coverage.sh
+
+  sast:
+    name: SAST (Semgrep)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Semgrep
+        run: ci/scan-code.sh
+
+  secrets:
+    name: secret scan (full history)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out with full history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The subject is the history. A shallow clone would scan only the
+          # tip, and ci/scan-secrets.sh refuses one.
+          fetch-depth: 0
+
+      - name: Scan every commit
+        run: ci/scan-secrets.sh
+
+  deps:
+    name: dependency scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Restore toolchain caches
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .local/ci-cache
+          key: toolchain-${{ runner.os }}-${{ hashFiles('go.sum', 'requirements*.txt', 'ci/lang/*.txt', 'ci/lang/pins.sh') }}
+          restore-keys: |
+            toolchain-${{ runner.os }}-
+
+      - name: Vulnerable versions present, reached or installed
+        run: ci/scan-deps.sh
+
+  iac:
+    name: infrastructure scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Misconfigurations and secrets in what would be provisioned
+        run: ci/scan-iac.sh

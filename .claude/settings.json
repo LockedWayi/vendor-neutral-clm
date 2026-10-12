@@ -1,0 +1,44 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status *)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(git rev-parse *)",
+      "Bash(git ls-files *)",
+      "Bash(git branch *)",
+      "Bash(git checkout *)",
+      "Bash(git switch *)",
+      "Bash(git add *)",
+      "Bash(git restore *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git fetch *)",
+      "Bash(git pull *)",
+      "Bash(git stash *)",
+      "Bash(gh pr *)",
+      "Bash(gh run *)",
+      "Bash(gh repo view *)",
+      "Bash(ci/*)",
+      "Bash(tools/*)",
+      "Bash(./ci/*)",
+      "Bash(./tools/*)",
+      "Edit",
+      "Write"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}\"/tools/session-close.sh --hook",
+            "timeout": 300
+          }
+        ]
+      }
+    ]
+  }
+}

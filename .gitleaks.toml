@@ -1,0 +1,26 @@
+# gitleaks configuration for this repository. ci/scan-secrets.sh reads it.
+#
+# The escape hatches are of two shapes, because the findings they exempt
+# differ in kind:
+#
+#   - A *recurring public string* (a published key label, a documented
+#     example identifier) gets an exact-match regex under [[allowlists]]
+#     below. It cannot mask anything else.
+#   - A *one-off historical finding* gets a commit-pinned fingerprint in
+#     .gitleaksignore (`<commit>:<path>:<rule>:<line>`). Editing or moving
+#     the content re-triggers the scan, which is the required property.
+#
+# What is not done: no path allowlist over source (a path exemption grows
+# silently), and no rule disabled repository-wide.
+
+[extend]
+useDefault = true
+
+# .local/ is gitignored working state and never committed. A history scan
+# cannot see it at all; this matters only for working-tree (`gitleaks dir`)
+# scans.
+[[allowlists]]
+description = "gitignored local state; never committed, scanned only by directory scans"
+paths = [
+  '''^\.local/''',
+]

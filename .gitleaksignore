@@ -1,0 +1,6 @@
+# Commit-pinned gitleaks fingerprints, one finding in one commit per line:
+#
+#   <commit>:<path>:<rule-id>:<line>
+#
+# Each line needs a comment above it: what the string is, why it is not a
+# secret, and the commit that removed it. Empty today.

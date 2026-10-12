@@ -1,0 +1,27 @@
+# Working state: caches, scan output, throwaway fixtures. Never committed,
+# never in a build context (.dockerignore excludes it too), never scanned.
+.local/
+
+# Secrets never live in the tree. These names are refused in case one is
+# created by accident; configuration references secrets by environment
+# variable name.
+.env
+.env.*
+*.pem
+*.key
+!docs/**/*.pub
+
+# Editors and OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Claude Code's per-machine permission grants; the shared hook and
+# allowlist live in .claude/settings.json and are committed.
+.claude/settings.local.json
+
+# Go
+/bin/
+*.test
+*.out

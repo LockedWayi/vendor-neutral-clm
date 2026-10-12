@@ -1,0 +1,8 @@
+# The build context is what an image can contain. Working state and
+# anything that might hold a secret stay out.
+.local/
+.git/
+.env
+.env.*
+*.pem
+*.key

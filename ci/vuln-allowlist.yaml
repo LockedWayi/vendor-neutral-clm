@@ -1,0 +1,38 @@
+# The single reviewed allowlist for dependency, image and source
+# vulnerability findings.
+#
+# One file, every scanner. `trivy` reads it natively as an --ignorefile,
+# which is why the schema is trivy's; ci/vuln-gate.py applies the same
+# entries to the language scanner (govulncheck or pip-audit), whose
+# findings trivy never sees. Splitting it per scanner would mean several
+# places to grant an exception and several chances to disagree.
+#
+# Every entry must carry:
+#
+#   id          the CVE, GHSA, GO- or PYSEC- identifier. Entries are
+#               matched against a finding's identifier and its aliases, so
+#               one spelling is enough.
+#   statement   why this finding does not apply *here*: the vulnerable
+#               path is unreachable, the affected feature is not built,
+#               the fix is not released. "false positive" is a verdict,
+#               not a reason, and is refused.
+#   expired_at  YYYY-MM-DD, at most 180 days out. trivy honours an entry
+#               with no expiry forever; ci/check-allowlist.sh refuses one.
+#
+# Example (not in force):
+#
+#   vulnerabilities:
+#     - id: CVE-2026-00000
+#       statement: >-
+#         The vulnerable parser is only reached through the XML import,
+#         which this project does not build (no import of pkg/xmlimport).
+#       expired_at: 2027-01-31
+#
+# Adding an entry is a review, not a fix. On the expiry date the finding
+# comes back and somebody looks again. An entry that suppresses nothing
+# fails ci/scan-deps.sh: an exception that stopped matching looks, from
+# outside, exactly like a clean scan.
+#
+# There are no accepted findings today, so the honest content of this file
+# is an empty list.
+vulnerabilities: []

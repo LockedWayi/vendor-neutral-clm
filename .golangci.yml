@@ -1,0 +1,23 @@
+# golangci-lint v2 configuration. ci/lang/lint.sh runs it at the version
+# pinned in ci/lang/pins.sh.
+#
+# Exceptions are `//nolint:<linter> // <reason>` on the line they cover.
+# Never a disabled linter and never an excluded path.
+version: "2"
+
+linters:
+  default: standard
+  enable:
+    - errorlint   # errors compared with errors.Is/As, never ==
+    - gosec       # the lint-level half of SAST; Semgrep is the other
+    - misspell
+    - nolintlint  # every //nolint names its linter and gives a reason
+    - unconvert
+  settings:
+    nolintlint:
+      require-explanation: true
+      require-specific: true
+
+formatters:
+  enable:
+    - gofmt
