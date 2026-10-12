@@ -5,6 +5,35 @@ with its reason. The method is extracted from one reference repository,
 without its code or subject matter. `template/` already satisfies every
 rule, and `new-project.sh` makes a project from it.
 
+## Deviations in this repository
+
+This copy is the method the repository started from, kept whole so the
+reasoning behind each rule stays readable. vendor-neutral-clm is a
+one-person learning and portfolio project, worked by hand, so it drops
+the parts of the method that exist for automated sessions and a
+dashboard, and adds two of its own. Where this list and the text below
+disagree, this list wins.
+
+Dropped:
+- the session hand-over (`docs/next-session.md`, `tools/next-session.sh`,
+  `tools/session-close.sh` and its selftest): a session ends with an
+  updated `docs/PROGRESS.md` and a learning-log entry instead;
+- the progress contract check (`ci/check-progress.sh`): `docs/PROGRESS.md`
+  and the phase frontmatter keep their shape, but no program reads them
+  and no gate checks them;
+- the phase audit by a second session (section 12): there is one person.
+
+Added:
+- `docs/learning-log/YYYY-MM-DD.md`, one entry per session, in Turkish:
+  what was built and learned, three self-check questions, the next step;
+- `docs/evidence/<phase>/`, the recorded output of each phase's
+  verification commands, so "it worked" is shown, not said.
+
+Kept unchanged: the layout (section 2), the document set (3), the writing
+and commit rules (4, 5), the gates and their exceptions (7 to 9), fail
+closed and the security defaults (11), phases with a command behind every
+"done when" (12).
+
 ## Contents
 
 1. [The principles under every rule](#1-the-principles-under-every-rule)

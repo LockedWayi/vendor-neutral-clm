@@ -1,7 +1,8 @@
 # Contributing
 
-This project follows [docs/BLUEPRINT.md](docs/BLUEPRINT.md). This file is
-the working summary of it.
+This project started from [docs/BLUEPRINT.md](docs/BLUEPRINT.md) and
+adapts it; the deviations are listed at the top of that file. This file
+is the working summary of what applies here.
 
 ## Workflow
 
@@ -31,8 +32,6 @@ the working summary of it.
    ci/check-pins.sh             # every image by digest, every action by SHA
    ci/check-allowlist.sh        # every exception has a reason and an expiry
    tools/check-public-links.sh  # every relative link resolves
-   ci/check-progress.sh         # PROGRESS and phase frontmatter within the contract
-   ci/session-close-selftest.sh # the close gate refuses each of its reasons
    ```
 
    The host needs `docker`, `git` and `bash`; every tool runs from an
@@ -40,10 +39,9 @@ the working summary of it.
    their databases, so they need network. These are the gates the
    pipeline runs. A check that cannot be run from here does not belong
    in the workflow.
-6. End the session by closing it: `docs/PROGRESS.md` frontmatter written
-   (`updated` today), `tools/next-session.sh` run, everything pushed, CI
-   green, then `tools/session-close.sh` exits 0. `CLAUDE.md` "Resuming
-   work" has the detail.
+6. End the session by hand: update `docs/PROGRESS.md` (where the work
+   stopped, what comes next), write the day's `docs/learning-log/`
+   entry, push the working branch and wait for CI.
 7. Open a PR. Fill in the template, including the **reasoning note** for
    any decision with a real alternative: what you decided, what you
    rejected and why, and what changes for an attacker.

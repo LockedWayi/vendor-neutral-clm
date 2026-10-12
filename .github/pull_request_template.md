@@ -40,7 +40,6 @@ fails with the fix removed. -->
 ci/lint-code.sh && ci/test.sh && ci/coverage.sh
 ci/scan-code.sh && ci/scan-secrets.sh && ci/scan-deps.sh && ci/scan-iac.sh
 ci/lint-shell.sh && ci/check-pins.sh && ci/check-allowlist.sh && tools/check-public-links.sh
-ci/check-progress.sh && ci/session-close-selftest.sh
 ```
 
 ## Documents updated in this PR

@@ -27,18 +27,5 @@
       "Edit",
       "Write"
     ]
-  },
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"${CLAUDE_PROJECT_DIR:-.}\"/tools/session-close.sh --hook",
-            "timeout": 300
-          }
-        ]
-      }
-    ]
   }
 }

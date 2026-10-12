@@ -13,7 +13,7 @@ depends_on: []
 <!-- Copy this file to docs/phases/NN-short-name.md. Delete every comment
 before the phase starts. The frontmatter is what machines read: `id`
 matches the file name's prefix, `status` agrees with the status line
-below (ci/check-progress.sh refuses a disagreement), `done_on` is set in
+below (kept in agreement by hand), `done_on` is set in
 the PR that closes the phase, and `depends_on` lists the ids that must be
 done before this one starts; `[]` for a phase that depends on nothing.
 It is never inferred from the number: see README.md. -->

@@ -16,18 +16,16 @@ updated: 2026-10-12
 # Progress
 
 Where this project stopped, and where the next session starts. The
-frontmatter above is the machine-readable part: the dashboard and
-`tools/session-close.sh` read it, and `ci/check-progress.sh` refuses a
-missing or malformed field. The body is for the reader. Every status is
-backed by the command named beside it, or says "not run".
+frontmatter keeps the blueprint's shape for a reader who knows it; no
+program reads it here. Every status is backed by the command named
+beside it, or says "not run".
 
 ## Start here
 
 1. Read `CLAUDE.md`, `docs/BLUEPRINT.md`, `docs/phases/README.md` and
    the phase named in the frontmatter.
-2. Read "Now" and "Next" below. `docs/next-session.md` is the same
-   information as a paste-ready prompt; `tools/next-session.sh` renders
-   it from this file.
+2. Read "Now" and "Next" below, then the latest `docs/learning-log/`
+   entry.
 3. Run every gate once (`CONTRIBUTING.md`); all exit 0 on a fresh
    project.
 

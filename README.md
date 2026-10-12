@@ -38,8 +38,6 @@ invisible to the others:
 | `trivy fs` + govulncheck (`ci/scan-deps.sh`) | what you imported | is a vulnerable version present, and does this code reach it? | yes |
 | `trivy config` (`ci/scan-iac.sh`) | what would be provisioned | is the infrastructure misconfigured? | yes |
 | shellcheck, pins, allowlist, links (`ci/lint-shell.sh`, `ci/check-pins.sh`, `ci/check-allowlist.sh`, `tools/check-public-links.sh`) | the gates themselves and the documents | is every script sound, every image and action pinned, every exception dated and reasoned, every link alive? | yes |
-| progress contract (`ci/check-progress.sh`) | `docs/PROGRESS.md` and `docs/phases/*.md` frontmatter | does every phase say what it depends on, and does each status agree with what a reader sees? | yes |
-| session-close selftest (`ci/session-close-selftest.sh`) | `tools/session-close.sh`, driven in a throwaway repository | does the close gate refuse each of its seven reasons and accept a clean close? | yes |
 
 Every check is a script in `ci/`, run the same way locally and in the
 pipeline. All of them are **required** on `main`, the repository owner

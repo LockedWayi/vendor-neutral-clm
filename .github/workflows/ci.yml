@@ -3,9 +3,8 @@
 # to one script: a check that cannot be run from a checkout does not belong
 # in this file.
 #
-#   suite    pins, shellcheck, links, allowlist schema, the progress
-#            contract, the session-close selftest, lint, tests, coverage
-#            floor
+#   suite    pins, shellcheck, links, allowlist schema, lint, tests,
+#            coverage floor
 #   sast     Semgrep over this repository's code
 #   secrets  gitleaks over the full history
 #   deps     trivy fs and the language scanner, and every allowlist entry
@@ -66,12 +65,6 @@ jobs:
 
       - name: Every allowlist entry has a reason and an expiry
         run: ci/check-allowlist.sh
-
-      - name: The progress contract holds
-        run: ci/check-progress.sh
-
-      - name: The session-close gate refuses each of its reasons
-        run: ci/session-close-selftest.sh
 
       - name: Format, vet or types, lint
         run: ci/lint-code.sh
