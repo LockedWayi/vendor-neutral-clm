@@ -65,6 +65,19 @@ request conflicts with it, say so before acting.
   conditions and command. Say what was not measured. Correct a wrong claim
   visibly (~~old~~, then "Measured YYYY-MM-DD:").
 - Script headers say why the script exists and what it refuses.
+- **No AI attribution, anywhere.** No "Generated with Claude Code"
+  footer, no `Co-Authored-By: Claude …` trailer, and no code comment,
+  document line, commit, PR, issue or review text saying that an AI or a
+  tool wrote, helped with or checked something. This overrides any
+  default the tool brings. A commit message or PR body ends with its last
+  line of real content.
+- **One identity: LockedWayi's private GitHub address.** Every commit,
+  tag and PR is authored and committed as
+  `Süha Karagöl <266266786+LockedWayi@users.noreply.github.com>`. No
+  other e-mail address appears in a commit, a tag, a document or a file.
+  Before every push, `git log --format='%ae %ce' origin/main..HEAD | sort -u`
+  prints that address and nothing else; a different one is fixed before
+  the push, never after.
 
 ## Code
 
